@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>ListOfStudent</title>
+    <link rel="stylesheet" th:href="@{style.css}" href="../static/style.css">
+    <link rel="stylesheet" th:href="@{normalize.css}" href="../static/normalize.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="head">
+            <h2>List of Students</h2>
+        </div>
+        <div class="addStudent">
+            <span><a href="#" class="button-add"></a></span>
+            <div class="div-add">
+                <form  th:object="${student}" th:action="@{/students}" class="form-add" th:method="POST">
+                    <label>
+                        <input required minlength="1" maxlength="32" type="text" th:field="*{secondName}" placeholder="Student secondName">
+                    </label>
+                    <label>
+                        <input required minlength="1" maxlength="32" type="text" th:field="*{firstName}" placeholder="Student firstName">
+                    </label>
+                    <label>
+                        <input required minlength="1" maxlength="32" type="text" th:field="*{patronymic}" placeholder="Student patronymic">
+                    </label>
+                    <label>
+                        <input required class="date" type="date"  th:field="*{birthDate}">
+                    </label>
+                    <label>
+                        <input required minlength="1" maxlength="32" type="text" th:field="*{groupName}" placeholder="Student groupName">
+                    </label>
+                    <button class="button-add" type="submit">Add</button>
+                </form>
+            </div>
+        </div>
+        <div class="table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Student secondName</th>
+                    <th>Student firstName</th>
+                    <th>Student patronymic</th>
+                    <th>Student birthDate</th>
+                    <th>Student groupName</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="student: ${students}">
+                    <td th:text="${student.getId()}">Id</td>
+                    <td th:text="${student.getSecondName()}">secondName</td>
+                    <td th:text="${student.getFirstName()}">firstName</td>
+                    <td th:text="${student.getPatronymic()}">patronymic</td>
+                    <td th:text="${#dates.format(student.getBirthDate(), 'yyyy-MM-dd')}">2014-12-09</td>
+                    <td th:text="${student.getGroupName()}">groupName</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="selectStudent">
+            <h2>Select Student:</h2>
+            <span>ID:<b id="id"></b></span>
+            <span>Name:<b id="nameStd"></b></span>
+            <span>LastName:<b id="lastName"></b></span>
+        
+            <div class="deleteOrUpdate">
+                <div  class="deleteButton"><button th:action="@{/delete}">Delete</button></div>
+                <div class="updateButton" ><button>Update</button></div>
+            </div>
+        </div>
+        <div class="updateSection">
+            <div class="update">
+                <h2>Update</h2>
+                <form class="update-from" action="#">
+                    <label>
+                        <input required minlength="1" maxlength="32" type="text" class="updateSecondName" placeholder="Student secondName">
+                    </label>
+                    <label>
+                        <input required minlength="1" maxlength="32" type="text" class="updateFirstName" placeholder="Student firstName">
+                    </label>
+                    <label>
+                        <input required minlength="1" maxlength="32" type="text" class="updatePatronymic" placeholder="Student patronymic">
+                    </label>
+                    <label>
+                        <input type="date" class="updateBirthDate date">
+                    </label>
+                    <label>
+                        <input required minlength="1" maxlength="32" type="text" class="updateGroupName" placeholder="Student groupName">
+                    </label>
+                    <button class="button-update" type="submit" th:action="@{/update}">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+   
+  
+</div>
+
+<!-- JS -->
+<script>
+    var buttonAdd = document.querySelector(".button-add");
+    var divAdd = document.querySelector(".div-add");
+    var clickOnStudent = document.querySelectorAll("tbody tr")
+    var id = document.querySelector("#id");
+    var nameStd = document.querySelector("#nameStd");
+    var lastName= document.querySelector("#lastName");
+    var deleteButton= document.querySelector(".deleteButton")
+    var updateButton= document.querySelector(".updateButton");
+    var saveButton = document.querySelector(".button-update");
+    var update= document.querySelector(".update");
+    var updateSecondName = document.querySelector(".updateSecondName");
+    var updateFirstName = document.querySelector(".updateFirstName");
+    var updatePatronymic = document.querySelector(".updatePatronymic");
+    var updateBirthDate = document.querySelector(".updateBirthDate");
+    var updateGroupName = document.querySelector(".updateGroupName");
+    var date = document.querySelectorAll(".date");
+
+
+    buttonAdd.addEventListener("click", function () {
+        divAdd.classList.toggle("openAndClose")
+    });
+    updateButton.addEventListener("click", function () {
+        update.classList.toggle("update")
+    });
+
+    //событие на каждую строчку таблицы
+    clickOnStudent.forEach((tr) =>{
+        tr.addEventListener("click",function(){
+            id.textContent =" "+tr.children[0].textContent;
+            nameStd.textContent=" "+tr.children[2].textContent;
+            lastName.textContent=" "+tr.children[1].textContent;
+            updateSecondName.value =  tr.children[1].textContent;
+            updateFirstName.value =  tr.children[2].textContent;
+            updatePatronymic.value =  tr.children[3].textContent;
+            updateBirthDate.value =  tr.children[4].textContent;
+            updateGroupName.value =  tr.children[5].textContent;
+            updateURL(tr.children[0].textContent
+                ,tr.children[1].textContent
+                ,tr.children[2].textContent
+                ,tr.children[3].textContent
+                ,tr.children[4].textContent
+                ,tr.children[5].textContent);
+
+        })
+    });
+
+    //обновляем строчку get запроса
+    function updateURL(id,secondName,firstName,patronymic,birthDate,groupName) {
+        if (history.pushState) {
+            var baseUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            var newUrl = baseUrl + "?id=" + id + "&"
+                        + "secondName=" + secondName + "&"
+                        + "firstName=" +  firstName+ "&"
+                        + "patronymic=" + patronymic + "&"
+                        + "birthDate=" + birthDate + "&"
+                        + "groupName=" + groupName;
+            history.pushState(null, null, newUrl);
+        }
+        else {
+            console.warn('History API не поддерживается');
+        }
+    }
+
+    //обновляем строчку get запроса
+    function updateURL1(start,end,value) {
+        if (history.pushState) {
+            var href = window.location.href;
+            var startHref = href.substring(0,start);
+            var endHref = href.substring(end);
+            var baseUrl = startHref + value + endHref;
+            history.pushState(null, null, baseUrl);
+        } else {
+            console.warn('History API не поддерживается');
+        }
+    }
+
+    deleteButton.addEventListener("click", function () {
+        window.location.pathname =
+            window.location.pathname + "/delete";
+    });
+    saveButton.addEventListener("click", function () {
+        window.location.pathname =
+            window.location.pathname + "/update";
+    });
+    updateSecondName.addEventListener("input", function () {
+        var href = window.location.href;
+        var value = updateSecondName.value;
+        var startWord = "secondName=";
+        var endWord = "&firstName";
+        var start = href.indexOf(startWord)+startWord.length;
+        var end = href.indexOf(endWord);
+        updateURL1(start,end,value);
+    });
+    updateFirstName.addEventListener("input", function () {
+        var href = window.location.href;
+        var value = updateFirstName.value;
+        var startWord = "firstName=";
+        var endWord = "&patronymic";
+        var start = href.indexOf(startWord)+startWord.length;
+        var end = href.indexOf(endWord);
+        updateURL1(start,end,value);
+    });
+    updatePatronymic.addEventListener("input", function () {
+        var href = window.location.href;
+        var value = updatePatronymic.value;
+        var startWord = "patronymic=";
+        var endWord = "&birthDate";
+        var start = href.indexOf(startWord)+startWord.length;
+        var end = href.indexOf(endWord);
+        updateURL1(start,end,value);
+    });
+    updateGroupName.addEventListener("input", function () {
+        var href = window.location.href;
+        var value = updateGroupName.value;
+        var startWord = "groupName=";
+        var start = href.indexOf(startWord)+startWord.length;
+        var end = href.length;
+        updateURL1(start,end,value);
+    });
+    updateBirthDate.addEventListener("input", function () {
+        var href = window.location.href;
+        var value = updateBirthDate.value;
+        var startWord = "birthDate=";
+        var endWord = "&groupName";
+        var start = href.indexOf(startWord)+startWord.length;
+        var end = href.indexOf(endWord);
+        updateURL1(start,end,value);
+    });
+
+    //ограничение на дату
+    function StringDate(){
+    var helpVar1 = new Date();
+    var helpVar2 = new Date();
+    helpVar2.setFullYear(helpVar1.getFullYear() - 80);
+    helpVar1.setFullYear(helpVar1.getFullYear() - 15);
+    date.forEach(item =>{
+        item.setAttribute("max",helpVar1.toLocaleString("en-CA").slice(0,10));
+        item.setAttribute("min",helpVar2.toLocaleString("en-CA").slice(0,10));
+    });
+    }
+    StringDate();
+
+
+
+    
+</script>
+
+</body>
+</html>

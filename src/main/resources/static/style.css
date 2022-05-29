@@ -1,0 +1,170 @@
+/*Button*/
+span{
+    position: relative;
+    display: inline-flex;
+    width: 80px;
+    height: 55px;
+}
+span a{
+    font-size: 13px;
+    letter-spacing: 1px;
+    transform-style: preserve-3d;
+    transform: translateZ(-25px);
+    transition: transform .25s;
+    font-family: 'Montserrat', sans-serif;
+
+}
+span a:before,
+span a:after{
+    position: absolute;
+    content: "Add Student";
+    height: 55px;
+    width: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 5px solid black;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+span a:before{
+    color: #fff;
+    background: #000;
+    transform: rotateY(0deg) translateZ(25px);
+}
+span a:after{
+    color: #000;
+    transform: rotateX(90deg) translateZ(25px);
+}
+span a:hover{
+    transform: translateZ(-25px) rotateX(-90deg);
+}
+/*Button*/
+
+/* Form */
+.div-add{
+    display: none;
+}
+
+.form-add{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.form-add input{
+    align-self: stretch;
+    width: 400px;
+    margin: 2px 0 2px 0px;
+}
+.form-add button{
+    width: 200px;
+    margin: 2px 0 2px 0px;
+    align-self: center;
+}
+.openAndClose{
+    display: flex;
+}
+
+/* AddForm */
+
+
+/* Table */
+
+table, th, td {
+    border: 1px solid;
+    text-align: center;
+    cursor: pointer;
+}
+
+table{
+    background-color: rgb(242, 235, 235);
+}
+
+th{
+    background-color: rgb(178, 155, 155);
+    white-space: nowrap;
+    padding: 10px;
+
+}
+
+tbody tr:nth-child(2n){
+    background-color: rgb(216, 195, 195);
+}
+
+/* AddTable */
+
+
+/* Container */
+
+.container{
+    display: flex;
+    flex-direction: column;            
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    margin-left: 10px;
+}
+
+.addStudent{
+    margin-bottom: 15px;
+    
+}
+.div-add{
+    margin: 10px 0 10px 0px;
+}
+
+/* Container */
+
+/* selectStudent */
+
+.selectStudent{
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+    width: 300px;
+}
+
+
+/* selectStudent */
+
+/* deleteOrUpdate */
+
+
+.deleteOrUpdate{
+    display: flex;
+    
+}
+.deleteOrUpdate button{
+    margin: 5px;
+}
+
+
+/* deleteOrUpdate */
+
+/* UpdateForm */
+.updateSection{
+    display: flex;
+    margin-bottom: 10px;
+}
+.update{
+    display: none;
+}
+.update-from{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    
+}
+.update-from input{
+    align-self: stretch;
+    margin: 2px 0 2px 0px;
+    width: 400px;
+}
+.button-update{
+    width: 200px;
+    margin: 2px 0 2px 0px;
+    align-self: center;
+}
+
+
+
+/* UpdateForm */
